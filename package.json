@@ -1,0 +1,20 @@
+{
+  "name": "advanced-react-components",
+  "description": "egghead course",
+  "version": "0.0.1",
+  "dependencies": {
+    "styled-components": "2.2.4",
+    "react-dom": "16.0.0",
+    "react": "16.0.0",
+    "prop-types": "15.6.0"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
