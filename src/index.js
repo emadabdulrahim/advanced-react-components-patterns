@@ -25,6 +25,7 @@ const withToggle = Component => {
 
 const TOGGLE_CONTEXT = '__toggle__'
 
+
 const ToggleOn = ({ children }, context) =>
   context[TOGGLE_CONTEXT].on ? children : ''
 
