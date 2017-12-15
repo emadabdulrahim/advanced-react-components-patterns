@@ -34,9 +34,9 @@ const Track = styled.div`
   transition: background 250ms ease;
 `
 
-const Switch = ({ on, toggle, ...props }) => (
-  <Track on={on} onClick={toggle} {...props}>
-    <Knob on={on} />
+const Switch = ({ toggle, ...props }) => (
+  <Track on={toggle.on} onClick={toggle.toggle} {...props}>
+    <Knob on={toggle.on} />
   </Track>
 )
 

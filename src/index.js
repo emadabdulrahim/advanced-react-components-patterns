@@ -9,11 +9,13 @@ const styles = {
   textAlign: 'center',
 }
 
+const TOGGLE_CONTEXT = '__toggle__'
+
 const withToggle = Component => {
   function Wrapper(props, context) {
     const toggleContext = context[TOGGLE_CONTEXT]
 
-    return <Component {...toggleContext} {...props} />
+    return <Component toggle={toggleContext} {...props} />
   }
 
   Wrapper.contextTypes = {
@@ -23,28 +25,27 @@ const withToggle = Component => {
   return Wrapper
 }
 
-const TOGGLE_CONTEXT = '__toggle__'
+const ToggleOn = withToggle(({ children, toggle }) =>
+  toggle.on ? children : ''
+)
 
-
-const ToggleOn = ({ children }, context) =>
-  context[TOGGLE_CONTEXT].on ? children : ''
-
-ToggleOn.contextTypes = {
-  [TOGGLE_CONTEXT]: PropTypes.object.isRequired,
-}
-
-const ToggleOff = ({ children }, context) =>
-  context[TOGGLE_CONTEXT].on ? '' : children
-
-ToggleOff.contextTypes = {
-  [TOGGLE_CONTEXT]: PropTypes.object.isRequired,
-}
+const ToggleOff = withToggle(({ children, toggle }) =>
+  toggle.on ? '' : children
+)
 
 const ToggleButton = withToggle(Switch)
 
-const CustomToggle = withToggle(({ on, toggle }, ...props) => (
-  <button onClick={toggle}>{on ? 'on' : 'off'}</button>
+const CustomToggle = withToggle(({ toggle }, ...props) => (
+  <button onClick={toggle.toggle}>{toggle.on ? 'on' : 'off'}</button>
 ))
+
+const MyEventComponent = withToggle(({ event, on, toggle }) => {
+  const props = {[event]: on}
+
+  return (
+    toggle.on && <button {...props}>The {event} event</button>
+  )
+})
 
 class Toggle extends React.Component {
   static On = ToggleOn
@@ -60,8 +61,6 @@ class Toggle extends React.Component {
     this.state = {
       on: false,
     }
-
-    console.log('constructor')
   }
 
   handleClick = () => {
@@ -71,24 +70,7 @@ class Toggle extends React.Component {
     })
   }
 
-  componentDidMount() {
-    console.log('componentDidMount')
-  }
-
-  componentWillMount() {
-    console.log('componentWillMount')
-  }
-
-  componentWillUpdate() {
-    console.log('componentWillUpdate')
-  }
-
-  componentDidUpdate() {
-    console.log('componentDidUpdate')
-  }
-
   getChildContext() {
-    console.log('getChildContext got called')
     return {
       [TOGGLE_CONTEXT]: {
         on: this.state.on,
@@ -98,8 +80,6 @@ class Toggle extends React.Component {
   }
 
   render() {
-    const { on } = this.state
-
     return this.props.children
   }
 }
@@ -114,6 +94,7 @@ const App = () => (
       </div>
       <Toggle.Button />
       <CustomToggle />
+      <MyEventComponent event='onClick' on={e => alert(e.type)} />
     </Toggle>
   </div>
 )
